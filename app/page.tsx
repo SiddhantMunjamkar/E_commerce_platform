@@ -32,7 +32,7 @@ export default function CartPage() {
 
     const fetchCartData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/cart", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cart`, {
           cache: "no-store",
         });
         if (res.ok) {
