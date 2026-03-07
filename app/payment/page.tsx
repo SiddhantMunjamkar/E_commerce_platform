@@ -101,8 +101,7 @@ export default function PaymentPage() {
 
                         <span className="col-span-2 font-medium leading-relaxed">
                           {address.street} {address.city} {address.pincode},{" "}
-                          {address.state} {" "}
-                          {address.country}
+                          {address.state} {address.country}
                         </span>
                       </div>
                     </>
@@ -116,9 +115,11 @@ export default function PaymentPage() {
               <Card className="p-6 rounded-xl border shadow-md relative overflow-hidden">
                 <h3 className="text-lg font-semibold mb-6">Payment</h3>
 
-                <div className="space-y-3 mb-6 text-sm">
+                <div className="space-y-3 mb-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-muted-foreground">
+                      Subtotal ({cartItems.length} items)
+                    </span>
                     <span>${subtotal.toFixed(2)}</span>
                   </div>
 
@@ -148,7 +149,7 @@ export default function PaymentPage() {
 
                 <Button
                   onClick={() => router.push("/success")}
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-semibold flex items-center  gap-2 py-6 cursor-pointer "
+                  className="w-full  bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white px-10 py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Lock size={18} />
                   Pay Securely

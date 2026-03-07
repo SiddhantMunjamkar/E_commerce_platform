@@ -1,6 +1,6 @@
 "use client";
 
-import  { createContext, useContext, useReducer, ReactNode } from "react";
+import  { createContext, useContext, useReducer, ReactNode, useEffect } from "react";
 import { CartItem, CartState, CartContextType, Address } from "@/types/cart";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -12,7 +12,8 @@ type CartAction =
   | { type: "REMOVE_ITEM"; payload: number }
   | { type: "SET_SHIPPING_FEE"; payload: number }
   | { type: "SET_DISCOUNT"; payload: number }
-  | { type: "SET_ADDRESS"; payload: Address };
+  | { type: "SET_ADDRESS"; payload: Address }
+  | { type: "LOAD_FROM_STORAGE"; payload: CartState };
 
 const calculateTotals = (cartItems: CartItem[], shippingFee: number, discount: number) => {
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -32,6 +33,10 @@ const initialState: CartState = {
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
+    case "LOAD_FROM_STORAGE": {
+      return action.payload;
+    }
+
     case "SET_CART_ITEMS": {
       const { subtotal, total } = calculateTotals(action.payload, state.shippingFee, state.discount);
       return { ...state, cartItems: action.payload, subtotal, total };
@@ -82,6 +87,32 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  // Load cart data from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("cartState");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          dispatch({ type: "LOAD_FROM_STORAGE", payload: parsed });
+        }
+      } catch (error) {
+        console.error("Failed to load cart from localStorage:", error);
+      }
+    }
+  }, []);
+
+  // Save cart data to localStorage whenever state changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("cartState", JSON.stringify(state));
+      } catch (error) {
+        console.error("Failed to save cart to localStorage:", error);
+      }
+    }
+  }, [state]);
 
   const increaseQuantity = (product_id: number) => {
     dispatch({ type: "INCREASE_QUANTITY", payload: product_id });

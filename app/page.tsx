@@ -143,7 +143,7 @@ export default function CartPage() {
                           <button
                             type="button"
                             onClick={() => removeItem(item.id)}
-                            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-red-500"
+                            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-red-500 cursor-pointer"
                           >
                             <Trash2 size={16} />
                             <span className="hidden sm:inline">Remove</span>
@@ -185,9 +185,9 @@ export default function CartPage() {
                 )}
               </div>
 
-              <Separator className="my-6" />
+              <Separator className="" />
 
-              <div className="flex justify-between mb-6">
+              <div className="flex justify-between mb-3">
                 <div>
                   <p className="font-semibold">Total</p>
                   <p className="text-xs text-muted-foreground">
@@ -200,7 +200,7 @@ export default function CartPage() {
 
               <Link href="/checkout">
                 <Button
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-semibold flex gap-2"
+                  className="w-full  bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white px-10 py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer"
                   size="lg"
                 >
                   Proceed to Checkout
