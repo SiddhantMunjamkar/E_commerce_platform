@@ -50,92 +50,83 @@ export default function CartPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Heading */}
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       <CheckoutHeader />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        {/* Heading */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Your Cart</h1>
 
-          <p className="text-muted-foreground mt-2">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-28 lg:pb-12">
+        {/* Page heading */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Your Cart</h1>
+          <p className="text-slate-500 mt-1.5 text-sm">
             Not ready to checkout?{" "}
-            <span className="text-emerald-500 font-medium cursor-pointer">
+            <span className="text-emerald-600 font-semibold cursor-pointer hover:text-emerald-700 transition-colors">
               Continue shopping
             </span>
           </p>
         </div>
 
-        {/* Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+          {/* ── LEFT: Cart items ── */}
           <div className="lg:col-span-8">
-            <Card className="rounded-xl border shadow-sm">
+            <Card className="rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <CardContent className="p-0">
                 {cartItems.length === 0 ? (
-                  <div className="p-6 text-center text-muted-foreground">
+                  <div className="py-16 text-center text-slate-400 text-sm">
                     Your cart is empty
                   </div>
                 ) : (
                   cartItems.map((item, index) => (
                     <div
                       key={item.id}
-                      className={`flex flex-col sm:flex-row gap-6 p-6 ${
-                        index !== cartItems.length - 1
-                          ? "border-b border-gray-100"
-                          : ""
+                      className={`flex flex-col sm:flex-row gap-5 p-6 transition-colors hover:bg-slate-50/60 ${
+                        index !== cartItems.length - 1 ? "border-b border-slate-100" : ""
                       }`}
                     >
-                      {/* Image */}
-                      <Image
-                        src={item.image}
-                        width={128}
-                        height={128}
-                        alt={item.name}
-                        className="w-24 h-24 sm:w-32 sm:h-32 rounded-lg border bg-gray-50 object-cover"
-                      />
+                      {/* Product image */}
+                      <div className="shrink-0">
+                        <Image
+                          src={item.image}
+                          width={112}
+                          height={112}
+                          alt={item.name}
+                          className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border border-slate-100 bg-slate-50 object-cover"
+                        />
+                      </div>
 
-                      {/* Product Info */}
-                      <div className="flex flex-1 flex-col justify-between">
+                      {/* Product details */}
+                      <div className="flex flex-1 flex-col justify-between gap-4">
                         <div className="flex justify-between items-start gap-4">
                           <div>
-                            <h3 className="font-semibold text-lg">
+                            <h3 className="font-semibold text-slate-900 text-base leading-snug">
                               {item.name}
                             </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {item.desc}
-                            </p>
+                            <p className="text-sm text-slate-500 mt-0.5">{item.desc}</p>
                           </div>
-
-                          <span className="font-bold text-lg">
-                            ${item.price}.00
+                          <span className="font-bold text-lg text-slate-900 whitespace-nowrap">
+                            ${(item.price * item.quantity).toFixed(2)}
                           </span>
                         </div>
 
-                        {/* Bottom Row */}
-                        <div className="flex justify-between items-center mt-4">
-                          {/* Quantity */}
-                          <div className="flex items-center border rounded-lg h-10 w-28">
+                        <div className="flex items-center justify-between">
+                          {/* Quantity stepper */}
+                          <div className="inline-flex items-center border border-slate-200 rounded-lg bg-white overflow-hidden h-9">
                             <button
                               type="button"
                               onClick={() => decreaseQuantity(item.id)}
-                              className="w-10 h-full flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700 rounded-l-lg transition-colors"
+                              className="w-9 h-full flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition-colors"
                             >
-                              <Minus size={16} />
+                              <Minus size={14} />
                             </button>
-
-                            <input
-                              type="number"
-                              value={item.quantity}
-                              readOnly
-                              className="w-8 text-center text-sm outline-none bg-transparent"
-                            />
-
+                            <span className="w-8 text-center text-sm font-semibold text-slate-800 select-none">
+                              {item.quantity}
+                            </span>
                             <button
                               type="button"
                               onClick={() => increaseQuantity(item.id)}
-                              className="w-10 h-full flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700 rounded-l-lg transition-colors"
+                              className="w-9 h-full flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-50 transition-colors"
                             >
-                              <Plus size={16} />
+                              <Plus size={14} />
                             </button>
                           </div>
 
@@ -143,10 +134,10 @@ export default function CartPage() {
                           <button
                             type="button"
                             onClick={() => removeItem(item.id)}
-                            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-red-500 cursor-pointer"
+                            className="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-red-500 transition-colors group"
                           >
-                            <Trash2 size={16} />
-                            <span className="hidden sm:inline">Remove</span>
+                            <Trash2 size={14} className="group-hover:scale-110 transition-transform" />
+                            <span>Remove</span>
                           </button>
                         </div>
                       </div>
@@ -157,62 +148,75 @@ export default function CartPage() {
             </Card>
           </div>
 
-          {/* RIGHT COLUMN */}
+          {/* ── RIGHT: Order summary (sticky on desktop) ── */}
           <div className="lg:col-span-4">
-            <Card className="p-6 rounded-xl border shadow-sm lg:sticky lg:top-24">
-              <h2 className="font-bold text-xl mb-6">Order Summary</h2>
+            <Card className="rounded-2xl border border-slate-200 shadow-sm p-6 lg:sticky lg:top-24">
+              <h2 className="font-bold text-lg text-slate-900 mb-5">Order Summary</h2>
 
-              <div className="space-y-4 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    Subtotal ({cartItems.length} items)
-                  </span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between text-slate-600">
+                  <span>Subtotal ({cartItems.length} item{cartItems.length !== 1 ? "s" : ""})</span>
+                  <span className="font-medium text-slate-900">${subtotal.toFixed(2)}</span>
                 </div>
-
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span className="font-medium">
+                <div className="flex justify-between text-slate-600">
+                  <span>Shipping</span>
+                  <span className={`font-medium ${shippingFee === 0 ? "text-emerald-600" : "text-slate-900"}`}>
                     {shippingFee > 0 ? `$${shippingFee.toFixed(2)}` : "Free"}
                   </span>
                 </div>
-
                 {discount > 0 && (
-                  <div className="flex justify-between text-emerald-500 font-medium">
-                    <span>Eco Discount applied</span>
-                    <span>- ${discount.toFixed(2)}</span>
+                  <div className="flex justify-between text-emerald-600 font-medium">
+                    <span>Eco Discount</span>
+                    <span>−${discount.toFixed(2)}</span>
                   </div>
                 )}
               </div>
 
-              <Separator className="" />
+              <Separator className="my-4" />
 
-              <div className="flex justify-between mb-3">
+              <div className="flex justify-between items-center mb-1">
                 <div>
-                  <p className="font-semibold">Total</p>
-                  <p className="text-xs text-muted-foreground">
-                    Including taxes if applicable
-                  </p>
+                  <p className="font-bold text-slate-900">Total</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Incl. taxes where applicable</p>
                 </div>
-
-                <span className="text-2xl font-bold">${total.toFixed(2)}</span>
+                <span className="text-2xl font-extrabold text-slate-900">${total.toFixed(2)}</span>
               </div>
 
-              <Link href="/checkout">
-                <Button
-                  className="w-full  bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white px-10 py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer"
-                  size="lg"
-                >
-                  Proceed to Checkout
-                  <ArrowRight size={18} />
-                </Button>
-              </Link>
-
-              <p className="text-xs text-muted-foreground mt-4 text-center">
-                Free returns within 30 days
-              </p>
+              <div className="mt-6 hidden lg:block">
+                <Link href="/checkout">
+                  <Button
+                    size="lg"
+                    className="w-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white rounded-xl font-bold h-12 shadow-md shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all"
+                  >
+                    Proceed to Checkout
+                    <ArrowRight size={18} />
+                  </Button>
+                </Link>
+                <p className="text-xs text-slate-400 mt-3 text-center">
+                  Free returns within 30 days
+                </p>
+              </div>
             </Card>
           </div>
+        </div>
+      </div>
+
+      {/* ── Sticky CTA bar (mobile only) ── */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur border-t border-slate-200 shadow-xl z-40">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-slate-500">Total</p>
+            <p className="font-bold text-slate-900">${total.toFixed(2)}</p>
+          </div>
+          <Link href="/checkout" className="shrink-0">
+            <Button
+              size="lg"
+              className="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white rounded-xl font-bold h-12 px-8 shadow-md shadow-emerald-500/25 flex items-center gap-2 transition-all"
+            >
+              Checkout
+              <ArrowRight size={18} />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
